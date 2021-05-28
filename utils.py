@@ -1,5 +1,6 @@
 from sklearn.metrics import multilabel_confusion_matrix
 from sklearn.metrics import classification_report
+import numpy as np
 
 def confusion_matrix(y_true,y_pred):
   confusion_matrix_ = np.sum(multilabel_confusion_matrix(y_true, y_pred),axis=0)
