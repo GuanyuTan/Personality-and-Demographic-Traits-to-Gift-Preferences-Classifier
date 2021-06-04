@@ -10,6 +10,10 @@ from sklearn.model_selection import RepeatedKFold
 from sklearn.model_selection import cross_validate
 
 def confusion_matrix(y_true,y_pred):
+    '''
+    Return a classifaction report to visualize the scores.
+    '''
+
     confusion_matrix_ = np.sum(multilabel_confusion_matrix(y_true, y_pred),axis=0)
     recall = confusion_matrix_[1,1]/(confusion_matrix_[1,1]+confusion_matrix_[1,0])
     print("Confusion Matrix\n", confusion_matrix_)
@@ -32,6 +36,9 @@ def multi_cat_val_handler(df, cols_list):
     return df
 
 def check_df(df, show_all=False, show_unique=False):
+    '''
+    Check whether null value exist in the dataframe.
+    '''
     null_exist =False
     for col in df.columns:
         if show_all or df[col].isna().values.sum() != 0:
@@ -45,6 +52,10 @@ def check_df(df, show_all=False, show_unique=False):
         print('No null exist in this dataframe.')
 
 def data_preprocessing(df):
+    '''
+    Clean up the data.
+    '''
+
     df['Birthday'] = df['Birthday'].apply(lambda _: datetime.strptime(_,"%Y-%m-%d"))
     
     #create necessary columns
@@ -95,7 +106,10 @@ def data_preprocessing(df):
         
     return new_df
 
-def get_dataset(): #straight use guanyu one
+def get_dataset(): 
+    '''
+    Get the datasets.
+    '''
     # returns data tuple with X_train, X_test, y_train, y_test
     df = pd.read_csv("data/Demographic to Gift Preference Survey.csv")
     new_df = data_preprocessing(df)
@@ -232,6 +246,9 @@ def f1_loss(y_true, y_pred):
     return 1 - K.mean(f1)
 
 def declare_model(input_shape, hidden_size, output_shape):
+    '''
+    Declare the models
+    '''
     return nn.Sequential(nn.Linear(input_shape, hidden_size),
                         nn.Dropout(p=0.7),
                         nn.Sigmoid(),
@@ -246,6 +263,9 @@ def declare_model(input_shape, hidden_size, output_shape):
                         )
 
 def get_top_k_pred(y_pred, k_num):
+    '''
+    Get the top k predictions
+    '''
     ans_master = []
     topk_master_list =[]
     for j in y_pred:#for each row:
@@ -269,6 +289,9 @@ def plot_graph(epoch_length, epoch_step, train_loss_per_epoch_list, test_loss_pe
     plt.legend()
 
 def train_model(train_dataset, test_dataset, model, loss_fn, opt='Adam' , epochs=5000, k_num=3):
+    '''
+    Train the model
+    '''
     trainloader = torch.utils.data.DataLoader(
                         train_dataset, 
                         batch_size=128)
